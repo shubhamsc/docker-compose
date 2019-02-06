@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:9.6.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+    - "nodeapp_test:/var/lib/postgresql/data"
+
+  my-app:
+    build: .
+    ports:
+      - 3000:3000
+    links:
+      - postgres
+    volumes:
+      - .:/app/
+
+  my-app2:
+    build: .
+    ports:
+      - 3001:3000
+    links:
+      - postgres
+    volumes:
+      - .:/app/
+
+volumes:
+  nodeapp_test:
