@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/number', (req, res) => {
-    console.log(req.url);
     client.query(`SELECT * FROM numbers;`)
         .then(resp => res.send(resp.rows))
         .catch(err => res.send("kal tak to chal rha tha!", err));

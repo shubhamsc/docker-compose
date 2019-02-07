@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  proxy:
+    build: "./nginx"
+    ports:
+      - 8000:8000
+    environment:
+      - HOSTS=http://my-app2:3000,http://my-app:3000
+    volumes:
+      - ./nginx:/app/nginx
+
   postgres:
     image: postgres:9.6.2
     restart: always
@@ -11,22 +20,18 @@ services:
     - "nodeapp_test:/var/lib/postgresql/data"
 
   my-app:
-    build: .
-    ports:
-      - 3000:3000
-    links:
+    build: ./app
+    depends_on:
       - postgres
     volumes:
-      - .:/app/
+      - ./app:/app/
 
   my-app2:
-    build: .
-    ports:
-      - 3001:3000
-    links:
+    build: ./app
+    depends_on:
       - postgres
     volumes:
-      - .:/app/
+      - ./app:/app/
 
 volumes:
   nodeapp_test:
